@@ -1,0 +1,81 @@
+/**
+ * Estilos para el panel de administración
+ */
+
+.menu-promesa-admin-container {
+    max-width: 800px;
+    margin-top: 20px;
+}
+
+.menu-promesa-info {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-left: 4px solid #2271b1;
+    padding: 20px;
+    margin-top: 30px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.menu-promesa-info h2 {
+    margin-top: 0;
+    font-size: 18px;
+}
+
+.menu-promesa-info ol {
+    line-height: 1.8;
+    margin-left: 20px;
+}
+
+.menu-promesa-info ol li {
+    margin-bottom: 10px;
+}
+
+/* Estilos para los campos del formulario */
+.form-table th {
+    font-weight: 600;
+}
+
+.form-table input.regular-text {
+    width: 100%;
+    max-width: 500px;
+}
+
+.form-table .description {
+    color: #646970;
+    font-style: italic;
+}
+
+/* Mensajes de configuración guardada */
+.settings-error {
+    margin: 15px 0;
+}
+
+/* Estilos para el widget en el backend */
+.widget .menu-promesa-menu-select {
+    margin-top: 5px;
+}
+
+.widget .description {
+    margin-top: 10px;
+    font-style: italic;
+    color: #646970;
+}
+
+.widget .description a {
+    text-decoration: none;
+}
+
+.widget .description a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+    .menu-promesa-admin-container {
+        padding: 10px;
+    }
+
+    .menu-promesa-info {
+        padding: 15px;
+    }
+}
