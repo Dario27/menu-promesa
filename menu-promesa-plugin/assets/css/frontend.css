@@ -1,0 +1,235 @@
+/**
+ * Estilos para el frontend del menú
+ */
+
+/* Contenedor principal */
+.menu-promesa-container {
+    margin: 20px 0;
+}
+
+/* Estado de carga */
+.menu-promesa-loading {
+    padding: 15px;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+}
+
+/* Mensaje de error */
+.menu-promesa-error {
+    padding: 15px;
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    color: #721c24;
+}
+
+.menu-promesa-error-message {
+    margin: 0;
+}
+
+/* Mensaje de menú vacío */
+.menu-promesa-empty {
+    padding: 15px;
+    text-align: center;
+    color: #999;
+    font-style: italic;
+}
+
+/* Navegación del menú */
+.menu-promesa-nav {
+    width: 100%;
+}
+
+/* Menú principal */
+.menu-promesa-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-promesa-menu > .menu-promesa-item {
+    position: relative;
+}
+
+/* Items del menú */
+.menu-promesa-item {
+    position: relative;
+}
+
+.menu-promesa-item > a,
+.menu-promesa-item > span {
+    display: block;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid #eee;
+}
+
+.menu-promesa-item > a:hover {
+    background-color: #f5f5f5;
+    color: #0073aa;
+    padding-left: 20px;
+}
+
+/* Items con hijos */
+.menu-promesa-item-has-children > a::after {
+    content: '\25BC';
+    font-size: 10px;
+    margin-left: 8px;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.menu-promesa-item-has-children.menu-promesa-item-open > a::after {
+    transform: rotate(180deg);
+}
+
+/* Submenús */
+.menu-promesa-submenu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    display: none;
+}
+
+.menu-promesa-item-open > .menu-promesa-submenu {
+    display: block;
+}
+
+.menu-promesa-submenu .menu-promesa-item > a,
+.menu-promesa-submenu .menu-promesa-item > span {
+    padding-left: 30px;
+    font-size: 0.95em;
+}
+
+.menu-promesa-submenu .menu-promesa-submenu .menu-promesa-item > a,
+.menu-promesa-submenu .menu-promesa-submenu .menu-promesa-item > span {
+    padding-left: 45px;
+    font-size: 0.9em;
+}
+
+/* Estilos para desktop (menú horizontal) */
+@media screen and (min-width: 769px) {
+    .menu-promesa-nav {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .menu-promesa-menu {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .menu-promesa-menu > .menu-promesa-item {
+        flex: 0 0 auto;
+    }
+
+    .menu-promesa-menu > .menu-promesa-item > a,
+    .menu-promesa-menu > .menu-promesa-item > span {
+        border-bottom: none;
+        border-right: 1px solid #eee;
+    }
+
+    .menu-promesa-menu > .menu-promesa-item:last-child > a {
+        border-right: none;
+    }
+
+    /* Submenús en desktop - dropdown */
+    .menu-promesa-item-has-children {
+        position: relative;
+    }
+
+    .menu-promesa-submenu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        min-width: 200px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-top: none;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    .menu-promesa-item-has-children:hover > .menu-promesa-submenu {
+        display: block;
+    }
+
+    .menu-promesa-submenu .menu-promesa-item > a,
+    .menu-promesa-submenu .menu-promesa-item > span {
+        border-bottom: 1px solid #eee;
+        border-right: none;
+    }
+
+    .menu-promesa-submenu .menu-promesa-submenu {
+        top: 0;
+        left: 100%;
+    }
+}
+
+/* Estilos para móvil */
+@media screen and (max-width: 768px) {
+    .menu-promesa-nav {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .menu-promesa-item > a,
+    .menu-promesa-item > span {
+        padding: 15px;
+    }
+
+    .menu-promesa-submenu {
+        background-color: #f5f5f5;
+    }
+
+    .menu-promesa-submenu .menu-promesa-item > a,
+    .menu-promesa-submenu .menu-promesa-item > span {
+        padding-left: 25px;
+    }
+
+    .menu-promesa-submenu .menu-promesa-submenu .menu-promesa-item > a,
+    .menu-promesa-submenu .menu-promesa-submenu .menu-promesa-item > span {
+        padding-left: 40px;
+    }
+}
+
+/* Tema oscuro (opcional) */
+.menu-promesa-container.dark-theme .menu-promesa-nav {
+    background-color: #2c3e50;
+}
+
+.menu-promesa-container.dark-theme .menu-promesa-item > a {
+    color: #ecf0f1;
+    border-bottom-color: #34495e;
+}
+
+.menu-promesa-container.dark-theme .menu-promesa-item > a:hover {
+    background-color: #34495e;
+    color: #3498db;
+}
+
+.menu-promesa-container.dark-theme .menu-promesa-submenu {
+    background-color: #34495e;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.menu-promesa-content {
+    animation: fadeIn 0.3s ease;
+}
