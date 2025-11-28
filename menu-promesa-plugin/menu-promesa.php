@@ -4,9 +4,11 @@
  * Plugin URI: https://github.com/Dario27/menu-promesa
  * Description: Plugin para gestionar menús dinámicos mediante API REST
  * Version: 1.0.0
- * Author: Dario27
+ * Author: Steven Chilan
  * Text Domain: menu-promesa
  * Domain Path: /languages
+ * PHP Require : 7.4 o Superior
+ * Wordpres Require: 6.8.x 
  */
 
 // Evitar acceso directo
