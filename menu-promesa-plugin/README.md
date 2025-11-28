@@ -8,6 +8,7 @@ Menu Promesa es un plugin que permite cargar menús dinámicamente desde una API
 
 ## Características
 
+- ✅ Integración con el sistema nativo de menús de WordPress
 - ✅ Configuración dinámica de endpoints de API
 - ✅ URL base automática basada en el dominio del sitio
 - ✅ Widget compatible con el Customizer de WordPress
@@ -25,20 +26,25 @@ Menu Promesa es un plugin que permite cargar menús dinámicamente desde una API
 
 ## Configuración
 
-### 1. Configurar Endpoints
+### 1. Crear o Gestionar Menús
 
-Vaya a **Menu Promesa** en el menú de administración de WordPress:
+1. Vaya a **Apariencia > Menús** en el panel de administración de WordPress
+2. Cree un nuevo menú o edite uno existente
+3. Agregue los elementos que desee al menú
+4. Guarde los cambios
 
-- **Endpoint para obtener lista de menús**: Ruta que devuelve la lista de menús disponibles
-  - Ejemplo: `/wp-json/custom/v1/obtenermenus`
-  - Debe devolver un array con objetos que contengan `id` y `name`
+**Nota**: Los menús se gestionan desde la interfaz nativa de WordPress. El plugin lee automáticamente todos los menús disponibles.
 
-- **Ruta del endpoint del menú**: Ruta para obtener el menú completo
+### 2. Configurar Endpoints de API
+
+Vaya a **Menu Promesa > Configuración de API** en el menú de administración:
+
+- **Ruta del endpoint del menú**: Ruta para obtener el menú completo desde la API externa
   - Ejemplo: `/wp-json/custom/v1/menus/:idMenu`
   - Use `:idMenu` como placeholder para el ID del menú
   - La URL base será automáticamente el dominio de su sitio
 
-### 2. Agregar el Widget
+### 3. Agregar el Widget
 
 1. Vaya a **Apariencia > Personalizar**
 2. Navegue a **Widgets**
@@ -47,27 +53,10 @@ Vaya a **Menu Promesa** en el menú de administración de WordPress:
 5. Seleccione **Menu Promesa**
 6. Configure el widget:
    - **Título**: (Opcional) Título que se mostrará encima del menú
-   - **Seleccionar Menú**: Elija el menú del dropdown
+   - **Seleccionar Menú**: Elija el menú del dropdown (los menús disponibles son los creados en Apariencia > Menús)
 7. Haga clic en **Publicar** para guardar los cambios
 
 ## Formato de Respuesta de la API
-
-### Endpoint de Lista de Menús
-
-Debe devolver un array de objetos con la siguiente estructura:
-
-```json
-[
-  {
-    "id": 201,
-    "name": "Menú Principal"
-  },
-  {
-    "id": 202,
-    "name": "Menú Footer"
-  }
-]
-```
 
 ### Endpoint del Menú
 
@@ -195,6 +184,13 @@ Este plugin es software libre.
 **Dario27**
 
 ## Changelog
+
+### 1.1.0
+- Integración con el sistema nativo de menús de WordPress
+- Reorganización del menú de administración con submenús
+- Eliminación del endpoint de lista de menús (ahora se obtienen directamente desde WordPress)
+- Los menús se gestionan desde Apariencia > Menús
+- Mejoras en la interfaz de administración
 
 ### 1.0.0
 - Versión inicial
