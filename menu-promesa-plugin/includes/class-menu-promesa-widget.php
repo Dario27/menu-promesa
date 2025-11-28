@@ -102,7 +102,7 @@ class Menu_Promesa_Widget extends WP_Widget {
         <?php endif; ?>
 
         <p class="description">
-            <a href="<?php echo admin_url('admin.php?page=menu-promesa'); ?>">
+            <a href="<?php echo admin_url('admin.php?page=menu-promesa-settings'); ?>">
                 <?php _e('Configurar endpoints de API', 'menu-promesa'); ?>
             </a>
         </p>
@@ -181,34 +181,25 @@ class Menu_Promesa_Widget extends WP_Widget {
     }
 
     /**
-     * Obtener lista de menús desde la API
+     * Obtener lista de menús desde WordPress
      */
     private function get_menus_list() {
-        $list_endpoint = get_option('menu_promesa_list_endpoint', '/wp-json/custom/v1/obtenermenus');
+        $menus = wp_get_nav_menus();
 
-        if (empty($list_endpoint)) {
-            return new WP_Error('no_endpoint', __('No se ha configurado el endpoint de lista de menús', 'menu-promesa'));
+        if (empty($menus)) {
+            return array();
         }
 
-        $url = home_url($list_endpoint);
-
-        $response = wp_remote_get($url, array(
-            'timeout' => 15,
-            'sslverify' => false, // En producción, esto debería ser true
-        ));
-
-        if (is_wp_error($response)) {
-            return $response;
+        // Formatear los menús al formato esperado por el widget
+        $formatted_menus = array();
+        foreach ($menus as $menu) {
+            $formatted_menus[] = array(
+                'id' => $menu->term_id,
+                'name' => $menu->name,
+            );
         }
 
-        $body = wp_remote_retrieve_body($response);
-        $data = json_decode($body, true);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return new WP_Error('invalid_json', __('Respuesta inválida del servidor', 'menu-promesa'));
-        }
-
-        return $data;
+        return $formatted_menus;
     }
 }
 
@@ -217,29 +208,21 @@ class Menu_Promesa_Widget extends WP_Widget {
  */
 add_action('wp_ajax_menu_promesa_get_menus', 'menu_promesa_ajax_get_menus');
 function menu_promesa_ajax_get_menus() {
-    $list_endpoint = get_option('menu_promesa_list_endpoint', '/wp-json/custom/v1/obtenermenus');
+    $menus = wp_get_nav_menus();
 
-    if (empty($list_endpoint)) {
-        wp_send_json_error(array('message' => __('No se ha configurado el endpoint', 'menu-promesa')));
+    if (empty($menus)) {
+        wp_send_json_success(array());
+        return;
     }
 
-    $url = home_url($list_endpoint);
-
-    $response = wp_remote_get($url, array(
-        'timeout' => 15,
-        'sslverify' => false,
-    ));
-
-    if (is_wp_error($response)) {
-        wp_send_json_error(array('message' => $response->get_error_message()));
+    // Formatear los menús al formato esperado
+    $formatted_menus = array();
+    foreach ($menus as $menu) {
+        $formatted_menus[] = array(
+            'id' => $menu->term_id,
+            'name' => $menu->name,
+        );
     }
 
-    $body = wp_remote_retrieve_body($response);
-    $data = json_decode($body, true);
-
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        wp_send_json_error(array('message' => __('Respuesta inválida del servidor', 'menu-promesa')));
-    }
-
-    wp_send_json_success($data);
+    wp_send_json_success($formatted_menus);
 }
