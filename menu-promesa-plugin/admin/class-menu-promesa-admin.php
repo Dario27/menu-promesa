@@ -54,6 +54,10 @@ class Menu_Promesa_Admin
     public function register_settings()
     {
         register_setting('menu_promesa_settings', 'menu_promesa_endpoint_route');
+        register_setting('menu_promesa_settings', 'menu_promesa_list_endpoint');
+        register_setting('menu_promesa_settings', 'menu_promesa_enable_sidebar');
+        register_setting('menu_promesa_settings', 'menu_promesa_sidebar_menu_id');
+        register_setting('menu_promesa_settings', 'menu_promesa_sidebar_position');
 
         add_settings_section(
             'menu_promesa_api_section',
@@ -68,6 +72,37 @@ class Menu_Promesa_Admin
             array($this, 'render_endpoint_route_field'),
             'menu-promesa-settings',
             'menu_promesa_api_section'
+        );
+
+        add_settings_section(
+            'menu_promesa_sidebar_section',
+            __('Configuración de Sidebar Automático', 'menu-promesa'),
+            array($this, 'render_sidebar_section_info'),
+            'menu-promesa'
+        );
+
+        add_settings_field(
+            'menu_promesa_enable_sidebar',
+            __('Activar sidebar automático', 'menu-promesa'),
+            array($this, 'render_enable_sidebar_field'),
+            'menu-promesa',
+            'menu_promesa_sidebar_section'
+        );
+
+        add_settings_field(
+            'menu_promesa_sidebar_menu_id',
+            __('Menú a mostrar en sidebar', 'menu-promesa'),
+            array($this, 'render_sidebar_menu_field'),
+            'menu-promesa',
+            'menu_promesa_sidebar_section'
+        );
+
+        add_settings_field(
+            'menu_promesa_sidebar_position',
+            __('Posición del sidebar', 'menu-promesa'),
+            array($this, 'render_sidebar_position_field'),
+            'menu-promesa',
+            'menu_promesa_sidebar_section'
         );
     }
 
@@ -211,7 +246,97 @@ class Menu_Promesa_Admin
     }
 
     /**
-     * Renderizar página de configuración
+     * Renderizar información de la sección sidebar
+     */
+    public function render_sidebar_section_info() {
+        echo '<p>' . __('Configure el sidebar lateral que aparecerá automáticamente en todas las páginas de tu sitio.', 'menu-promesa') . '</p>';
+    }
+
+    /**
+     * Renderizar campo para activar sidebar
+     */
+    public function render_enable_sidebar_field() {
+        $value = get_option('menu_promesa_enable_sidebar', '0');
+        ?>
+        <label>
+            <input type="checkbox"
+                   id="menu_promesa_enable_sidebar"
+                   name="menu_promesa_enable_sidebar"
+                   value="1"
+                   <?php checked($value, '1'); ?>>
+            <?php _e('Mostrar menú en sidebar lateral en todas las páginas', 'menu-promesa'); ?>
+        </label>
+        <p class="description">
+            <?php _e('Al activar esta opción, el menú se mostrará automáticamente en un sidebar lateral fijo en todas las páginas del sitio.', 'menu-promesa'); ?>
+        </p>
+        <?php
+    }
+
+    /**
+     * Renderizar campo para seleccionar menú del sidebar
+     */
+    public function render_sidebar_menu_field() {
+        $selected_menu_id = get_option('menu_promesa_sidebar_menu_id', '');
+
+        // Obtener lista de menús
+        $list_endpoint = get_option('menu_promesa_list_endpoint', '/wp-json/custom/v1/obtenermenus');
+        $url = home_url($list_endpoint);
+
+        $response = wp_remote_get($url, array(
+            'timeout' => 15,
+            'sslverify' => false,
+        ));
+
+        $menus = array();
+        if (!is_wp_error($response)) {
+            $body = wp_remote_retrieve_body($response);
+            $data = json_decode($body, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($data)) {
+                $menus = $data;
+            }
+        }
+        ?>
+        <select id="menu_promesa_sidebar_menu_id"
+                name="menu_promesa_sidebar_menu_id"
+                class="regular-text">
+            <option value=""><?php _e('-- Seleccionar menú --', 'menu-promesa'); ?></option>
+            <?php foreach ($menus as $menu): ?>
+                <option value="<?php echo esc_attr($menu['id']); ?>"
+                        <?php selected($selected_menu_id, $menu['id']); ?>>
+                    <?php echo esc_html($menu['name']); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <p class="description">
+            <?php _e('Selecciona el menú que se mostrará en el sidebar lateral.', 'menu-promesa'); ?>
+        </p>
+        <?php
+    }
+
+    /**
+     * Renderizar campo para posición del sidebar
+     */
+    public function render_sidebar_position_field() {
+        $value = get_option('menu_promesa_sidebar_position', 'left');
+        ?>
+        <select id="menu_promesa_sidebar_position"
+                name="menu_promesa_sidebar_position"
+                class="regular-text">
+            <option value="left" <?php selected($value, 'left'); ?>>
+                <?php _e('Izquierda', 'menu-promesa'); ?>
+            </option>
+            <option value="right" <?php selected($value, 'right'); ?>>
+                <?php _e('Derecha', 'menu-promesa'); ?>
+            </option>
+        </select>
+        <p class="description">
+            <?php _e('Elige en qué lado de la pantalla aparecerá el sidebar.', 'menu-promesa'); ?>
+        </p>
+        <?php
+    }
+
+    /**
+     * Renderizar página de administración
      */
     public function render_settings_page()
     {
