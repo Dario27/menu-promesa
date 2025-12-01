@@ -1,14 +1,15 @@
 <?php
+
 /**
  * Plugin Name: Menu Promesa
  * Plugin URI: https://github.com/Dario27/menu-promesa
  * Description: Plugin para gestionar menús dinámicos mediante API REST
- * Version: 1.1.0
+ * Version: 1.3.0
  * Author: Steven Chilan
  * Text Domain: menu-promesa
  * Domain Path: /languages
- * PHP Require : 7.4 o Superior
- * Wordpres Require: 6.8.x
+ * Requires at least: WordPress 5.0 o superior
+ * Requires PHP: 7.4 o superior
  */
 
 // Evitar acceso directo
@@ -17,7 +18,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Definir constantes del plugin
-define('MENU_PROMESA_VERSION', '1.1.0');
+define('MENU_PROMESA_VERSION', '1.3.0');
 define('MENU_PROMESA_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('MENU_PROMESA_PLUGIN_URL', plugin_dir_url(__FILE__));
 
