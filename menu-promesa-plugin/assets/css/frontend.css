@@ -1,47 +1,92 @@
 /**
- * Estilos para el frontend del menú
+ * Estilos para el frontend del menú - Diseño Moderno e Interactivo
+ * Soporte para menú multinivel (3 niveles)
  */
 
-/* Contenedor principal */
+/* ========================================
+   VARIABLES CSS Y CONFIGURACIÓN GLOBAL
+   ======================================== */
+:root {
+    --menu-primary-color: #ff4757;
+    --menu-primary-hover: #ff3838;
+    --menu-secondary-color: #2c3e50;
+    --menu-text-color: #2c3e50;
+    --menu-text-hover: #ffffff;
+    --menu-bg-color: #ffffff;
+    --menu-border-color: #e1e8ed;
+    --menu-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --menu-shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.12);
+    --menu-level1-bg: #ffffff;
+    --menu-level2-bg: #f8f9fa;
+    --menu-level3-bg: #ecf0f1;
+    --menu-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --menu-border-radius: 8px;
+}
+
+/* ========================================
+   CONTENEDOR PRINCIPAL
+   ======================================== */
 .menu-promesa-container {
     margin: 20px 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
-/* Estado de carga */
+/* ========================================
+   ESTADOS DE CARGA Y ERROR
+   ======================================== */
 .menu-promesa-loading {
-    padding: 15px;
+    padding: 30px 20px;
     text-align: center;
-    color: #666;
+    color: #7f8c8d;
     font-style: italic;
+    background: linear-gradient(90deg, #f8f9fa 25%, #ffffff 50%, #f8f9fa 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+    border-radius: var(--menu-border-radius);
 }
 
-/* Mensaje de error */
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
 .menu-promesa-error {
-    padding: 15px;
-    background: #f8d7da;
-    border: 1px solid #f5c6cb;
-    border-radius: 4px;
-    color: #721c24;
+    padding: 20px;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    border: none;
+    border-radius: var(--menu-border-radius);
+    color: #ffffff;
+    box-shadow: var(--menu-shadow);
 }
 
 .menu-promesa-error-message {
     margin: 0;
+    font-weight: 500;
 }
 
-/* Mensaje de menú vacío */
 .menu-promesa-empty {
-    padding: 15px;
+    padding: 30px 20px;
     text-align: center;
-    color: #999;
+    color: #95a5a6;
     font-style: italic;
+    background-color: #f8f9fa;
+    border-radius: var(--menu-border-radius);
 }
 
-/* Navegación del menú */
+/* ========================================
+   NAVEGACIÓN DEL MENÚ - BASE
+   ======================================== */
 .menu-promesa-nav {
     width: 100%;
+    background-color: var(--menu-bg-color);
+    border-radius: var(--menu-border-radius);
+    box-shadow: var(--menu-shadow);
+    overflow: hidden;
 }
 
-/* Menú principal */
+/* ========================================
+   MENÚ PRINCIPAL - LISTA BASE
+   ======================================== */
 .menu-promesa-menu {
     list-style: none;
     margin: 0;
@@ -52,93 +97,175 @@
     position: relative;
 }
 
-/* Items del menú */
+/* ========================================
+   ITEMS DEL MENÚ - ESTILOS GENERALES
+   ======================================== */
 .menu-promesa-item {
     position: relative;
 }
 
 .menu-promesa-item > a,
 .menu-promesa-item > span {
-    display: block;
-    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
     text-decoration: none;
-    color: #333;
-    transition: all 0.3s ease;
-    border-bottom: 1px solid #eee;
+    color: var(--menu-text-color);
+    transition: var(--menu-transition);
+    border-bottom: 1px solid var(--menu-border-color);
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efecto hover moderno con barra lateral */
+.menu-promesa-item > a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: linear-gradient(180deg, var(--menu-primary-color) 0%, var(--menu-primary-hover) 100%);
+    transform: scaleY(0);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .menu-promesa-item > a:hover {
-    background-color: #f5f5f5;
-    color: #0073aa;
-    padding-left: 20px;
+    background: linear-gradient(90deg, rgba(255, 71, 87, 0.08) 0%, transparent 100%);
+    color: var(--menu-primary-color);
+    padding-left: 28px;
 }
 
-/* Items con hijos */
+.menu-promesa-item > a:hover::before {
+    transform: scaleY(1);
+}
+
+/* ========================================
+   ITEMS CON HIJOS - INDICADORES
+   ======================================== */
+.menu-promesa-item-has-children > a {
+    position: relative;
+    padding-right: 45px;
+}
+
 .menu-promesa-item-has-children > a::after {
-    content: '\25BC';
-    font-size: 10px;
-    margin-left: 8px;
-    display: inline-block;
-    transition: transform 0.3s ease;
+    content: '\276F';
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--menu-primary-color);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .menu-promesa-item-has-children.menu-promesa-item-open > a::after {
-    transform: rotate(180deg);
+    transform: translateY(-50%) rotate(270deg);
 }
 
-/* Submenús */
+.menu-promesa-item-has-children > a:hover::after {
+    color: var(--menu-primary-hover);
+}
+
+/* ========================================
+   SUBMENÚS - NIVEL 2 Y 3
+   ======================================== */
 .menu-promesa-submenu {
     list-style: none;
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
     display: none;
+    overflow: hidden;
 }
 
 .menu-promesa-item-open > .menu-promesa-submenu {
     display: block;
+    animation: slideDown 0.3s ease-out;
 }
 
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        max-height: 0;
+    }
+    to {
+        opacity: 1;
+        max-height: 1000px;
+    }
+}
+
+/* Nivel 2 - Submenú */
 .menu-promesa-submenu .menu-promesa-item > a,
 .menu-promesa-submenu .menu-promesa-item > span {
-    padding-left: 30px;
+    padding-left: 40px;
     font-size: 0.95em;
+    background-color: var(--menu-level2-bg);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+.menu-promesa-submenu .menu-promesa-item > a:hover {
+    padding-left: 48px;
+    background: linear-gradient(90deg, rgba(255, 71, 87, 0.12) 0%, transparent 100%);
+}
+
+/* Nivel 3 - Sub-submenú */
 .menu-promesa-submenu .menu-promesa-submenu .menu-promesa-item > a,
 .menu-promesa-submenu .menu-promesa-submenu .menu-promesa-item > span {
-    padding-left: 45px;
+    padding-left: 60px;
     font-size: 0.9em;
+    background-color: var(--menu-level3-bg);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
 }
 
-/* Estilos para desktop (menú horizontal) */
-@media screen and (min-width: 769px) {
-    .menu-promesa-nav {
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
+.menu-promesa-submenu .menu-promesa-submenu .menu-promesa-item > a:hover {
+    padding-left: 68px;
+    background: linear-gradient(90deg, rgba(255, 71, 87, 0.15) 0%, transparent 100%);
+}
 
+/* Iconos indicadores para niveles */
+.menu-promesa-submenu .menu-promesa-item > a::before,
+.menu-promesa-submenu .menu-promesa-item > span::before {
+    content: '▸';
+    position: absolute;
+    left: 20px;
+    color: var(--menu-primary-color);
+    font-size: 12px;
+}
+
+.menu-promesa-submenu .menu-promesa-submenu .menu-promesa-item > a::before,
+.menu-promesa-submenu .menu-promesa-submenu .menu-promesa-item > span::before {
+    content: '▹';
+    left: 40px;
+}
+
+/* ========================================
+   ESTILOS PARA DESKTOP
+   ======================================== */
+@media screen and (min-width: 769px) {
     .menu-promesa-menu {
         display: flex;
         flex-wrap: wrap;
+        align-items: stretch;
     }
 
     .menu-promesa-menu > .menu-promesa-item {
         flex: 0 0 auto;
+        border-right: 1px solid var(--menu-border-color);
+    }
+
+    .menu-promesa-menu > .menu-promesa-item:last-child {
+        border-right: none;
     }
 
     .menu-promesa-menu > .menu-promesa-item > a,
     .menu-promesa-menu > .menu-promesa-item > span {
         border-bottom: none;
-        border-right: 1px solid #eee;
+        height: 100%;
     }
 
-    .menu-promesa-menu > .menu-promesa-item:last-child > a {
-        border-right: none;
-    }
-
-    /* Submenús en desktop - dropdown */
+    /* Submenús en desktop - dropdown con efecto moderno */
     .menu-promesa-item-has-children {
         position: relative;
     }
@@ -147,78 +274,127 @@
         position: absolute;
         top: 100%;
         left: 0;
-        min-width: 200px;
-        background: #fff;
-        border: 1px solid #ddd;
-        border-top: none;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        min-width: 280px;
+        background: var(--menu-bg-color);
+        border-radius: 0 0 var(--menu-border-radius) var(--menu-border-radius);
+        box-shadow: var(--menu-shadow-hover);
         z-index: 1000;
+        border-top: 3px solid var(--menu-primary-color);
     }
 
     .menu-promesa-item-has-children:hover > .menu-promesa-submenu {
         display: block;
+        animation: fadeInDown 0.3s ease-out;
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .menu-promesa-submenu .menu-promesa-item > a,
     .menu-promesa-submenu .menu-promesa-item > span {
-        border-bottom: 1px solid #eee;
         border-right: none;
     }
 
+    .menu-promesa-submenu .menu-promesa-item:last-child > a {
+        border-bottom: none;
+    }
+
+    /* Nivel 3 en desktop - lateral derecho */
     .menu-promesa-submenu .menu-promesa-submenu {
         top: 0;
         left: 100%;
+        border-radius: 0 var(--menu-border-radius) var(--menu-border-radius) 0;
+        border-top: none;
+        border-left: 3px solid var(--menu-primary-color);
+        margin-left: -1px;
+    }
+
+    .menu-promesa-item-has-children > a::after {
+        transform: translateY(-50%) rotate(0deg);
+    }
+
+    .menu-promesa-item-has-children:hover > a::after {
+        transform: translateY(-50%) rotate(180deg);
+    }
+
+    .menu-promesa-submenu .menu-promesa-item-has-children > a::after {
+        transform: translateY(-50%) rotate(0deg);
+    }
+
+    .menu-promesa-submenu .menu-promesa-item-has-children:hover > a::after {
+        transform: translateY(-50%) rotate(180deg);
     }
 }
 
-/* Estilos para móvil */
+/* ========================================
+   ESTILOS PARA MÓVIL
+   ======================================== */
 @media screen and (max-width: 768px) {
-    .menu-promesa-nav {
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
-
     .menu-promesa-item > a,
     .menu-promesa-item > span {
-        padding: 15px;
+        padding: 18px 20px;
+        font-size: 16px;
     }
 
     .menu-promesa-submenu {
-        background-color: #f5f5f5;
+        background-color: var(--menu-level2-bg);
     }
 
     .menu-promesa-submenu .menu-promesa-item > a,
     .menu-promesa-submenu .menu-promesa-item > span {
-        padding-left: 25px;
+        padding-left: 35px;
+        padding-top: 14px;
+        padding-bottom: 14px;
     }
 
     .menu-promesa-submenu .menu-promesa-submenu .menu-promesa-item > a,
     .menu-promesa-submenu .menu-promesa-submenu .menu-promesa-item > span {
-        padding-left: 40px;
+        padding-left: 50px;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    /* Asegurar que los iconos se vean bien en móvil */
+    .menu-promesa-submenu .menu-promesa-item > a::before {
+        left: 15px;
+    }
+
+    .menu-promesa-submenu .menu-promesa-submenu .menu-promesa-item > a::before {
+        left: 30px;
     }
 }
 
-/* Tema oscuro (opcional) */
-.menu-promesa-container.dark-theme .menu-promesa-nav {
-    background-color: #2c3e50;
-}
-
-.menu-promesa-container.dark-theme .menu-promesa-item > a {
-    color: #ecf0f1;
-    border-bottom-color: #34495e;
+/* ========================================
+   TEMA OSCURO
+   ======================================== */
+.menu-promesa-container.dark-theme {
+    --menu-text-color: #ecf0f1;
+    --menu-bg-color: #2c3e50;
+    --menu-border-color: #34495e;
+    --menu-level1-bg: #2c3e50;
+    --menu-level2-bg: #34495e;
+    --menu-level3-bg: #3d566e;
 }
 
 .menu-promesa-container.dark-theme .menu-promesa-item > a:hover {
-    background-color: #34495e;
-    color: #3498db;
+    background: linear-gradient(90deg, rgba(255, 71, 87, 0.15) 0%, transparent 100%);
 }
 
-.menu-promesa-container.dark-theme .menu-promesa-submenu {
-    background-color: #34495e;
+/* ========================================
+   ANIMACIONES ADICIONALES
+   ======================================== */
+.menu-promesa-content {
+    animation: fadeIn 0.4s ease;
 }
 
-/* Animaciones */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -230,6 +406,24 @@
     }
 }
 
-.menu-promesa-content {
-    animation: fadeIn 0.3s ease;
+/* Efecto de pulso para items activos */
+.menu-promesa-item.active > a {
+    background: linear-gradient(90deg, rgba(255, 71, 87, 0.1) 0%, transparent 100%);
+    color: var(--menu-primary-color);
+}
+
+.menu-promesa-item.active > a::before {
+    transform: scaleY(1);
+}
+
+/* Efecto de focus para accesibilidad */
+.menu-promesa-item > a:focus {
+    outline: 2px solid var(--menu-primary-color);
+    outline-offset: -2px;
+    background: linear-gradient(90deg, rgba(255, 71, 87, 0.08) 0%, transparent 100%);
+}
+
+/* Transiciones suaves para todos los cambios */
+* {
+    transition: var(--menu-transition);
 }

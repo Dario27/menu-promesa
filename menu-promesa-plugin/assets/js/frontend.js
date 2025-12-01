@@ -1,9 +1,17 @@
 /**
  * JavaScript para cargar menús dinámicamente desde la API
+ * Soporte para menú multinivel interactivo (3 niveles)
  */
 
 (function($) {
     'use strict';
+
+    // Configuración global
+    var config = {
+        mobileBreakpoint: 768,
+        animationDuration: 300,
+        hoverDelay: 200
+    };
 
     /**
      * Inicializar el cargador de menús
@@ -48,7 +56,10 @@
                 if (response && (response.menu || response.items || Array.isArray(response))) {
                     // Renderizar el menú
                     var html = renderMenu(response);
-                    $content.html(html).fadeIn();
+                    $content.html(html).fadeIn(config.animationDuration);
+
+                    // Inicializar interactividad después de renderizar
+                    initMenuInteractivity($content);
                 } else {
                     showError($error, 'No se encontraron datos del menú');
                 }
@@ -91,27 +102,33 @@
         }
 
         return '<nav class="menu-promesa-nav"><ul class="menu-promesa-menu">' +
-               renderMenuItems(items) +
+               renderMenuItems(items, 1) +
                '</ul></nav>';
     }
 
     /**
-     * Renderizar items del menú recursivamente
+     * Renderizar items del menú recursivamente con soporte para 3 niveles
+     * @param {Array} items - Items del menú
+     * @param {Number} level - Nivel actual (1, 2 o 3)
      */
-    function renderMenuItems(items, isChild) {
+    function renderMenuItems(items, level) {
         var html = '';
-        var className = isChild ? 'menu-promesa-submenu' : 'menu-promesa-menu';
+
+        // Limitar a 3 niveles
+        if (level > 3) {
+            return html;
+        }
 
         $.each(items, function(index, item) {
             var hasChildren = item.children && Array.isArray(item.children) && item.children.length > 0;
-            var itemClass = 'menu-promesa-item';
+            var itemClass = 'menu-promesa-item menu-promesa-level-' + level;
 
             if (hasChildren) {
                 itemClass += ' menu-promesa-item-has-children';
             }
 
             // Construir el elemento del menú
-            html += '<li class="' + itemClass + '">';
+            html += '<li class="' + itemClass + '" data-level="' + level + '">';
 
             // Link del menú
             if (item.url || item.link) {
@@ -119,17 +136,18 @@
                 var title = item.title || item.name || item.label || 'Sin título';
                 var target = item.target || '_self';
 
-                html += '<a href="' + escapeHtml(url) + '" target="' + escapeHtml(target) + '">';
+                html += '<a href="' + escapeHtml(url) + '" target="' + escapeHtml(target) + '" class="menu-promesa-link">';
                 html += escapeHtml(title);
                 html += '</a>';
             } else {
-                html += '<span>' + escapeHtml(item.title || item.name || 'Sin título') + '</span>';
+                var title = item.title || item.name || item.label || 'Sin título';
+                html += '<span class="menu-promesa-link">' + escapeHtml(title) + '</span>';
             }
 
-            // Renderizar hijos si existen
-            if (hasChildren) {
-                html += '<ul class="menu-promesa-submenu">';
-                html += renderMenuItems(item.children, true);
+            // Renderizar hijos si existen y no superamos el nivel 3
+            if (hasChildren && level < 3) {
+                html += '<ul class="menu-promesa-submenu menu-promesa-submenu-level-' + (level + 1) + '">';
+                html += renderMenuItems(item.children, level + 1);
                 html += '</ul>';
             }
 
@@ -140,12 +158,130 @@
     }
 
     /**
+     * Inicializar interactividad del menú
+     */
+    function initMenuInteractivity($content) {
+        var $nav = $content.find('.menu-promesa-nav');
+
+        // Marcar item activo basado en la URL actual
+        markActiveItem($nav);
+
+        // Inicializar comportamiento según dispositivo
+        if (isMobile()) {
+            initMobileBehavior($nav);
+        } else {
+            initDesktopBehavior($nav);
+        }
+
+        // Reinicializar en cambio de tamaño de ventana
+        var resizeTimer;
+        $(window).on('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                if (isMobile()) {
+                    initMobileBehavior($nav);
+                } else {
+                    initDesktopBehavior($nav);
+                }
+            }, 250);
+        });
+    }
+
+    /**
+     * Comportamiento para dispositivos móviles
+     */
+    function initMobileBehavior($nav) {
+        // Remover eventos anteriores
+        $nav.find('.menu-promesa-item-has-children > a, .menu-promesa-item-has-children > span').off('click.menuPromesa');
+
+        // Agregar click para toggle de submenús
+        $nav.on('click.menuPromesa', '.menu-promesa-item-has-children > a, .menu-promesa-item-has-children > span', function(e) {
+            var $link = $(this);
+            var $item = $link.parent();
+            var $submenu = $item.children('.menu-promesa-submenu');
+
+            // Si tiene hijos, prevenir navegación y hacer toggle
+            if ($submenu.length > 0) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                // Cerrar otros submenús del mismo nivel
+                $item.siblings('.menu-promesa-item-open').each(function() {
+                    $(this).removeClass('menu-promesa-item-open')
+                           .children('.menu-promesa-submenu').slideUp(config.animationDuration);
+                });
+
+                // Toggle del submenú actual
+                $item.toggleClass('menu-promesa-item-open');
+                $submenu.slideToggle(config.animationDuration);
+            }
+        });
+    }
+
+    /**
+     * Comportamiento para desktop
+     */
+    function initDesktopBehavior($nav) {
+        // Remover eventos de móvil
+        $nav.off('click.menuPromesa');
+
+        // Cerrar submenús abiertos en móvil
+        $nav.find('.menu-promesa-item-open').removeClass('menu-promesa-item-open');
+        $nav.find('.menu-promesa-submenu').removeAttr('style');
+
+        // Hover para nivel 1
+        $nav.find('.menu-promesa-menu > .menu-promesa-item-has-children').hover(
+            function() {
+                $(this).addClass('menu-promesa-item-hover');
+            },
+            function() {
+                $(this).removeClass('menu-promesa-item-hover');
+            }
+        );
+
+        // Hover para niveles 2 y 3
+        $nav.find('.menu-promesa-submenu .menu-promesa-item-has-children').hover(
+            function() {
+                $(this).addClass('menu-promesa-item-hover');
+            },
+            function() {
+                $(this).removeClass('menu-promesa-item-hover');
+            }
+        );
+    }
+
+    /**
+     * Marcar item activo basado en URL
+     */
+    function markActiveItem($nav) {
+        var currentUrl = window.location.href;
+        var currentPath = window.location.pathname;
+
+        $nav.find('a.menu-promesa-link').each(function() {
+            var $link = $(this);
+            var href = $link.attr('href');
+
+            if (href === currentUrl || href === currentPath) {
+                $link.closest('.menu-promesa-item').addClass('active');
+
+                // Abrir padres en móvil
+                if (isMobile()) {
+                    $link.closest('.menu-promesa-item').parents('.menu-promesa-item-has-children').each(function() {
+                        $(this).addClass('menu-promesa-item-open')
+                               .children('.menu-promesa-submenu').show();
+                    });
+                }
+            }
+        });
+    }
+
+    /**
      * Mostrar mensaje de error
      */
     function showError($errorContainer, message) {
         $errorContainer
             .html('<p class="menu-promesa-error-message">' + escapeHtml(message) + '</p>')
-            .fadeIn();
+            .fadeIn(config.animationDuration);
     }
 
     /**
@@ -163,19 +299,10 @@
     }
 
     /**
-     * Toggle para submenús (opcional)
+     * Detectar si es dispositivo móvil
      */
-    function initSubmenuToggle() {
-        $(document).on('click', '.menu-promesa-item-has-children > a', function(e) {
-            var $item = $(this).parent();
-
-            // Solo prevenir default en móviles
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                $item.toggleClass('menu-promesa-item-open');
-                $item.find('> .menu-promesa-submenu').slideToggle(200);
-            }
-        });
+    function isMobile() {
+        return window.innerWidth <= config.mobileBreakpoint;
     }
 
     /**
@@ -183,7 +310,6 @@
      */
     $(document).ready(function() {
         initMenuLoader();
-        initSubmenuToggle();
     });
 
     /**
