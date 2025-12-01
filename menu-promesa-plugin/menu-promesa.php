@@ -55,6 +55,7 @@ class Menu_Promesa {
     private function includes() {
         require_once MENU_PROMESA_PLUGIN_DIR . 'admin/class-menu-promesa-admin.php';
         require_once MENU_PROMESA_PLUGIN_DIR . 'includes/class-menu-promesa-widget.php';
+        require_once MENU_PROMESA_PLUGIN_DIR . 'includes/class-menu-promesa-sidebar.php';
     }
 
     /**

@@ -1,0 +1,392 @@
+/**
+ * Estilos para el Sidebar Lateral Fijo
+ * Menu Promesa - WordPress Plugin
+ */
+
+/* ========================================
+   VARIABLES CSS PARA SIDEBAR
+   ======================================== */
+:root {
+    --sidebar-width: 280px;
+    --sidebar-bg: #ffffff;
+    --sidebar-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+    --sidebar-header-bg: #ff4757;
+    --sidebar-header-text: #ffffff;
+    --sidebar-z-index: 9999;
+    --sidebar-transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================
+   SIDEBAR PRINCIPAL
+   ======================================== */
+#menu-promesa-sidebar {
+    position: fixed;
+    top: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background-color: var(--sidebar-bg);
+    box-shadow: var(--sidebar-shadow);
+    z-index: var(--sidebar-z-index);
+    transition: var(--sidebar-transition);
+    overflow: hidden;
+}
+
+/* Posición izquierda (por defecto) */
+#menu-promesa-sidebar.menu-promesa-sidebar-left {
+    left: 0;
+}
+
+/* Posición derecha */
+#menu-promesa-sidebar.menu-promesa-sidebar-right {
+    right: 0;
+    box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================
+   HEADER DEL SIDEBAR
+   ======================================== */
+.menu-promesa-sidebar-header {
+    background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.menu-promesa-sidebar-title {
+    margin: 0;
+    color: var(--sidebar-header-text);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.menu-promesa-sidebar-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: var(--sidebar-header-text);
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: none; /* Oculto en desktop */
+}
+
+.menu-promesa-sidebar-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+/* ========================================
+   CONTENIDO DEL SIDEBAR
+   ======================================== */
+.menu-promesa-sidebar-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.menu-promesa-sidebar-menu {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0;
+}
+
+/* Scrollbar personalizado */
+.menu-promesa-sidebar-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.menu-promesa-sidebar-menu::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.menu-promesa-sidebar-menu::-webkit-scrollbar-thumb {
+    background: #ff4757;
+    border-radius: 3px;
+}
+
+.menu-promesa-sidebar-menu::-webkit-scrollbar-thumb:hover {
+    background: #ff3838;
+}
+
+/* ========================================
+   ESTILOS DEL MENÚ EN SIDEBAR
+   ======================================== */
+.menu-promesa-sidebar-menu .menu-promesa-nav {
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.menu-promesa-sidebar-menu .menu-promesa-menu {
+    display: block !important; /* Forzar vertical */
+}
+
+.menu-promesa-sidebar-menu .menu-promesa-item > a,
+.menu-promesa-sidebar-menu .menu-promesa-item > span {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.menu-promesa-sidebar-menu .menu-promesa-item:last-child > a,
+.menu-promesa-sidebar-menu .menu-promesa-item:last-child > span {
+    border-bottom: none;
+}
+
+/* Submenús en sidebar siempre verticales */
+.menu-promesa-sidebar-menu .menu-promesa-submenu {
+    position: static !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    width: 100% !important;
+    min-width: auto !important;
+}
+
+/* ========================================
+   BOTÓN TOGGLE (HAMBURGUESA) - MÓVIL
+   ======================================== */
+.menu-promesa-sidebar-toggle {
+    position: fixed;
+    top: 20px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%);
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+    cursor: pointer;
+    z-index: calc(var(--sidebar-z-index) + 1);
+    transition: all 0.3s ease;
+    display: none; /* Oculto en desktop */
+    padding: 0;
+}
+
+.menu-promesa-sidebar-toggle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(255, 71, 87, 0.5);
+}
+
+.menu-promesa-sidebar-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Posicionar botón según posición del sidebar */
+.menu-promesa-sidebar-left + .menu-promesa-sidebar-toggle {
+    left: 20px;
+}
+
+.menu-promesa-sidebar-right + .menu-promesa-sidebar-toggle {
+    right: 20px;
+}
+
+/* Icono hamburguesa */
+.menu-promesa-hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.menu-promesa-hamburger span {
+    display: block;
+    width: 24px;
+    height: 3px;
+    background-color: #ffffff;
+    margin: 3px 0;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+/* Animación del hamburguesa cuando está abierto */
+#menu-promesa-sidebar.sidebar-open .menu-promesa-hamburger span:nth-child(1) {
+    transform: rotate(45deg) translate(7px, 7px);
+}
+
+#menu-promesa-sidebar.sidebar-open .menu-promesa-hamburger span:nth-child(2) {
+    opacity: 0;
+}
+
+#menu-promesa-sidebar.sidebar-open .menu-promesa-hamburger span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* ========================================
+   OVERLAY PARA MÓVIL
+   ======================================== */
+.menu-promesa-sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: calc(var(--sidebar-z-index) - 1);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    display: none; /* Solo en móvil */
+}
+
+#menu-promesa-sidebar.sidebar-open .menu-promesa-sidebar-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ========================================
+   RESPONSIVE - DESKTOP
+   ======================================== */
+@media screen and (min-width: 769px) {
+    /* Sidebar siempre visible en desktop */
+    #menu-promesa-sidebar {
+        transform: translateX(0) !important;
+    }
+
+    /* Ajustar el body para el sidebar */
+    body.menu-promesa-has-sidebar-left {
+        margin-left: var(--sidebar-width);
+    }
+
+    body.menu-promesa-has-sidebar-right {
+        margin-right: var(--sidebar-width);
+    }
+
+    /* Asegurar que el menú sea vertical en sidebar */
+    .menu-promesa-sidebar-menu .menu-promesa-menu {
+        display: block !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .menu-promesa-sidebar-menu .menu-promesa-menu > .menu-promesa-item {
+        border-right: none !important;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .menu-promesa-sidebar-menu .menu-promesa-item > a,
+    .menu-promesa-sidebar-menu .menu-promesa-item > span {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+    }
+}
+
+/* ========================================
+   RESPONSIVE - MÓVIL Y TABLET
+   ======================================== */
+@media screen and (max-width: 768px) {
+    /* Mostrar botón toggle */
+    .menu-promesa-sidebar-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Mostrar botón de cerrar en header */
+    .menu-promesa-sidebar-close {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Mostrar overlay */
+    .menu-promesa-sidebar-overlay {
+        display: block;
+    }
+
+    /* Sidebar oculto por defecto en móvil */
+    #menu-promesa-sidebar.menu-promesa-sidebar-left {
+        transform: translateX(-100%);
+    }
+
+    #menu-promesa-sidebar.menu-promesa-sidebar-right {
+        transform: translateX(100%);
+    }
+
+    /* Sidebar visible cuando está abierto */
+    #menu-promesa-sidebar.sidebar-open {
+        transform: translateX(0) !important;
+    }
+
+    /* No ajustar el body en móvil */
+    body.menu-promesa-has-sidebar-left,
+    body.menu-promesa-has-sidebar-right {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    /* Aumentar el z-index del sidebar cuando está abierto */
+    #menu-promesa-sidebar.sidebar-open {
+        z-index: calc(var(--sidebar-z-index) + 2);
+    }
+}
+
+/* ========================================
+   ANIMACIONES Y TRANSICIONES
+   ======================================== */
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* Animación de entrada del sidebar */
+#menu-promesa-sidebar.sidebar-animated-left {
+    animation: slideInLeft 0.3s ease-out;
+}
+
+#menu-promesa-sidebar.sidebar-animated-right {
+    animation: slideInRight 0.3s ease-out;
+}
+
+/* ========================================
+   ACCESIBILIDAD
+   ======================================== */
+.menu-promesa-sidebar-toggle:focus,
+.menu-promesa-sidebar-close:focus {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+/* Reducir movimiento para usuarios que lo prefieren */
+@media (prefers-reduced-motion: reduce) {
+    #menu-promesa-sidebar,
+    .menu-promesa-sidebar-toggle,
+    .menu-promesa-sidebar-close,
+    .menu-promesa-sidebar-overlay {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* ========================================
+   ESTADOS DE CARGA EN SIDEBAR
+   ======================================== */
+.menu-promesa-sidebar-menu .menu-promesa-loading {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.menu-promesa-sidebar-menu .menu-promesa-error {
+    margin: 20px;
+}
+
+.menu-promesa-sidebar-menu .menu-promesa-content {
+    background: transparent;
+}
